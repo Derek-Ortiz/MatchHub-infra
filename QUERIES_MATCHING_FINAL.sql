@@ -1,8 +1,3 @@
--- =====================================================
--- QUERIES DE MATCHING - VERSION POSTGRES
--- =====================================================
-
--- ==================== QUERY 1: PREFERENCIAS CON PORCENTAJE ====================
 CREATE OR REPLACE FUNCTION sp_obtener_preferencias_con_porcentaje(
   p_usuario_id INTEGER,
   p_otro_usuario_id INTEGER
@@ -52,7 +47,7 @@ FROM preferencias_con_coincidencia
 ORDER BY estado_coincidencia DESC, nombre ASC;
 $$;
 
--- ==================== QUERY 2: LIMPIAR SOLICITUDES EXPIRADAS ====================
+
 CREATE OR REPLACE PROCEDURE sp_limpiar_solicitudes_expiradas()
 LANGUAGE plpgsql
 AS $$
@@ -87,7 +82,7 @@ BEGIN
 END;
 $$;
 
--- ==================== QUERY 3: SOLICITUDES RECIBIDAS ====================
+
 CREATE OR REPLACE FUNCTION sp_obtener_solicitudes_recibidas(
   p_usuario_id INTEGER
 )
@@ -133,10 +128,3 @@ WHERE sm.jugador_receptor_id = p_usuario_id
   AND sm.deleted_at IS NULL
 ORDER BY sm.compatibility_score DESC;
 $$;
-
--- =====================================================
--- EJECUCION
--- CALL sp_limpiar_solicitudes_expiradas();
--- SELECT * FROM sp_obtener_preferencias_con_porcentaje(1, 2);
--- SELECT * FROM sp_obtener_solicitudes_recibidas(1);
--- =====================================================

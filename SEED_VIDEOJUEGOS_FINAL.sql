@@ -1,6 +1,3 @@
--- =====================================================
--- SEED DATA - VIDEOJUEGOS PREDEFINIDOS
--- =====================================================
 
 INSERT INTO videojuegos (nombre, rawg_id, plataformas, origen, activo) VALUES
 ('The Witcher 3', 3328, '["pc", "ps4", "ps5", "xbox", "switch"]', 'rawg', TRUE),
@@ -13,7 +10,3 @@ INSERT INTO videojuegos (nombre, rawg_id, plataformas, origen, activo) VALUES
 ('Counter-Strike 2', 16672, '["pc"]', 'rawg', TRUE),
 ('Dota 2', 975, '["pc"]', 'rawg', TRUE),
 ('Apex Legends', 659079, '["pc", "ps4", "ps5", "xbox"]', 'rawg', TRUE);
-
--- =====================================================
--- SEED LISTO
--- =====================================================

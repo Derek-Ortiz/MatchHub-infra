@@ -1,6 +1,3 @@
--- =====================================================
--- SEED DATA - PREFERENCIAS ACTUALIZADAS (16 TOTALES)
--- =====================================================
 
 DELETE FROM preferencias WHERE creador_id IS NULL;
 
@@ -17,7 +14,3 @@ INSERT INTO preferencias (nombre, descripcion, creador_id, activo) VALUES
 ('Divertido', 'Ambiente relajado, risas y buen ambiente', NULL, TRUE),
 ('Nocturno', 'Preferencia por jugar en horarios nocturnos', NULL, TRUE),
 ('Social', 'Preferencia por jugar con amigos y socializar', NULL, TRUE);
-
--- =====================================================
--- SEED LISTO
--- =====================================================

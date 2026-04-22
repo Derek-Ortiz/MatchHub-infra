@@ -1,10 +1,3 @@
--- =====================================================
--- GAMING PLATFORM v2 - POSTGRESQL 16 SCHEMA
--- Notes:
--- - Database should exist: gaming_platform_v2
--- - Adds clerk_user_id for Clerk integration
--- =====================================================
-
 DO $$
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'estilo_juego_enum') THEN
@@ -32,7 +25,7 @@ BEGIN
   END IF;
 END$$;
 
--- ==================== TABLA: JUGADORES ====================
+
 CREATE TABLE jugadores (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   clerk_user_id VARCHAR(64) NOT NULL UNIQUE,
@@ -57,7 +50,7 @@ CREATE INDEX idx_jugadores_email ON jugadores (email);
 CREATE INDEX idx_jugadores_estado ON jugadores (estado);
 CREATE INDEX idx_jugadores_region ON jugadores (region);
 
--- ==================== TABLA: DISPONIBILIDAD ====================
+
 CREATE TABLE disponibilidad (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   jugador_id INTEGER NOT NULL REFERENCES jugadores(id) ON DELETE CASCADE,
@@ -73,7 +66,7 @@ CREATE TABLE disponibilidad (
 CREATE INDEX idx_disponibilidad_jugador_id ON disponibilidad (jugador_id);
 CREATE INDEX idx_disponibilidad_dia_semana ON disponibilidad (dia_semana);
 
--- ==================== TABLA: VIDEOJUEGOS ====================
+
 CREATE TABLE videojuegos (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   nombre VARCHAR(150) NOT NULL UNIQUE,
@@ -91,7 +84,7 @@ CREATE INDEX idx_videojuego_rawg_id ON videojuegos (rawg_id);
 CREATE INDEX idx_videojuego_activo ON videojuegos (activo);
 CREATE INDEX idx_videojuego_origen ON videojuegos (origen);
 
--- ==================== TABLA: PREFERENCIAS ====================
+
 CREATE TABLE preferencias (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   nombre VARCHAR(100) NOT NULL,
@@ -106,7 +99,7 @@ CREATE TABLE preferencias (
 CREATE INDEX idx_preferencias_creador_id ON preferencias (creador_id);
 CREATE INDEX idx_preferencias_activo ON preferencias (activo);
 
--- ==================== TABLA PUENTE: JUGADOR_PREFERENCIAS ====================
+
 CREATE TABLE jugador_preferencias (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   jugador_id INTEGER NOT NULL REFERENCES jugadores(id) ON DELETE CASCADE,
@@ -118,7 +111,7 @@ CREATE TABLE jugador_preferencias (
 CREATE INDEX idx_jugador_preferencias_jugador_id ON jugador_preferencias (jugador_id);
 CREATE INDEX idx_jugador_preferencias_preferencia_id ON jugador_preferencias (preferencia_id);
 
--- ==================== TABLA: VIDEOJUEGOS_JUGADOR ====================
+
 CREATE TABLE videojuegos_jugador (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   jugador_id INTEGER NOT NULL REFERENCES jugadores(id) ON DELETE CASCADE,
@@ -130,7 +123,7 @@ CREATE TABLE videojuegos_jugador (
 CREATE INDEX idx_videojuegos_jugador_jugador_id ON videojuegos_jugador (jugador_id);
 CREATE INDEX idx_videojuegos_jugador_videojuego_id ON videojuegos_jugador (videojuego_id);
 
--- ==================== TABLA: SOLICITUDES DE MATCH ====================
+
 CREATE TABLE solicitudes_match (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   jugador_solicitante_id INTEGER NOT NULL REFERENCES jugadores(id) ON DELETE CASCADE,
@@ -155,7 +148,7 @@ CREATE INDEX idx_solicitudes_solicitante ON solicitudes_match (jugador_solicitan
 CREATE INDEX idx_solicitudes_compatibility_score ON solicitudes_match (compatibility_score DESC);
 CREATE INDEX idx_solicitudes_pendiente_expiracion ON solicitudes_match (estado, fecha_expiracion);
 
--- ==================== TABLA: HISTORIAL DE ESTADOS ====================
+
 CREATE TABLE historial_estados_match (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   solicitud_match_id INTEGER NOT NULL REFERENCES solicitudes_match(id) ON DELETE CASCADE,
@@ -169,7 +162,7 @@ CREATE TABLE historial_estados_match (
 CREATE INDEX idx_historial_solicitud_match_id ON historial_estados_match (solicitud_match_id);
 CREATE INDEX idx_historial_usuario_id ON historial_estados_match (usuario_id);
 
--- ==================== TABLA: MATCHES CONFIRMADOS ====================
+
 CREATE TABLE match (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   jugador_1_id INTEGER NOT NULL REFERENCES jugadores(id) ON DELETE CASCADE,
@@ -189,7 +182,7 @@ CREATE INDEX idx_match_jugador_1 ON match (jugador_1_id);
 CREATE INDEX idx_match_jugador_2 ON match (jugador_2_id);
 CREATE INDEX idx_match_estado ON match (estado);
 
--- ==================== UPDATED_AT TRIGGERS ====================
+
 CREATE OR REPLACE FUNCTION set_updated_at()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -198,7 +191,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- ==================== CREATED_AT TRIGGERS ====================
+
 CREATE OR REPLACE FUNCTION set_created_at()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -282,7 +275,7 @@ CREATE TRIGGER set_created_at_match
 BEFORE INSERT ON match
 FOR EACH ROW EXECUTE FUNCTION set_created_and_updated_at();
 
--- ==================== VISTA PARA BUSQUEDA RAPIDA ====================
+
 CREATE OR REPLACE VIEW jugadores_buscables AS
 SELECT
   j.id,
@@ -298,7 +291,3 @@ LEFT JOIN videojuegos_jugador vj ON j.id = vj.jugador_id
 LEFT JOIN jugador_preferencias jp ON j.id = jp.jugador_id
 WHERE j.estado = 'activo' AND j.deleted_at IS NULL
 GROUP BY j.id, j.username, j.estilo_juego, j.region, j.plataformas, j.is_online;
-
--- =====================================================
--- SCHEMA LISTO
--- =====================================================

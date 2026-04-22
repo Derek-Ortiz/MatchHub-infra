@@ -1,8 +1,3 @@
--- =====================================================
--- SP BUSCAR COMPATIBLES - VERSION POSTGRES
--- Logica: compara todos los dias y calcula porcentaje proporcional
--- =====================================================
-
 CREATE OR REPLACE FUNCTION sp_buscar_compatibles(
   p_usuario_id INTEGER,
   p_page INTEGER DEFAULT 1,
@@ -117,8 +112,3 @@ BEGIN
   LIMIT p_limit OFFSET v_offset;
 END;
 $$;
-
--- =====================================================
--- PRUEBA
--- SELECT * FROM sp_buscar_compatibles(1, 1, 20);
--- =====================================================

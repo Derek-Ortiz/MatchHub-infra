@@ -1,8 +1,3 @@
--- =====================================================
--- FUNCTION: fn_calcular_compatibility_score
--- Proposito: calcular score al crear solicitud_match
--- =====================================================
-
 CREATE OR REPLACE FUNCTION fn_calcular_compatibility_score(
   p_jugador_a_id INTEGER,
   p_jugador_b_id INTEGER
@@ -74,8 +69,3 @@ BEGIN
   RETURN v_score_total;
 END;
 $$;
-
--- =====================================================
--- PRUEBA
--- SELECT fn_calcular_compatibility_score(1, 2) AS score;
--- =====================================================
